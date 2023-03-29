@@ -33,7 +33,7 @@ local function InitEffect(self, go)
 	
 	-- 配置
 	if not self.config.IsLoop and self.config.LiveTime > 0 then
-		self.timer = TimerManager:GetInstance():GetTimer(self.config.LiveTime, self.timer_action , self)
+		self.timer = TimerManager:I():GetTimer(self.config.LiveTime, self.timer_action , self)
 		self.timer:Start()
 	end
 end
@@ -66,7 +66,7 @@ local function __init(self, parent_trans, effect_config, create_callback)
 		GetRenderers(self)
 	else
 		-- 资源加载
-		GameObjectPool:GetInstance():GetGameObjectAsync(effect_config.EffectPath, function(go, self)
+		GameObjectPool:I():GetGameObjectAsync(effect_config.EffectPath, function(go, self)
 			if self ~= nil then
 				InitEffect(self, go)
 				self:OnCreate()
@@ -83,7 +83,7 @@ local function __delete(self)
 	self:OnDestroy()
 	-- 回收资源
 	if effect_config and not IsNull(self.gameObject) then
-		GameObjectPool:GetInstance():RecycleGameObject(self.config.EffectPath, self.gameObject)
+		GameObjectPool:I():RecycleGameObject(self.config.EffectPath, self.gameObject)
 	end
 	-- 释放引用
 	self.config = nil

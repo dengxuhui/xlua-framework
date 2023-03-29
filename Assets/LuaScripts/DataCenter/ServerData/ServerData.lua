@@ -33,7 +33,7 @@ local function ParseServerList(self, servers)
 		item.recommend = v.recommend
 		self.servers[item.server_id] = item
 	end
-	DataManager:GetInstance():Broadcast(DataMessageNames.ON_SERVER_LIST_CHG, self)
+	DataManager:I():Broadcast(DataMessageNames.ON_SERVER_LIST_CHG, self)
 end
 
 ServerData.ParseServerList = ParseServerList

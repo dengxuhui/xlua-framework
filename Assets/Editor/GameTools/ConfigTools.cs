@@ -13,12 +13,17 @@ public class ConfigTools : EditorWindow
 {
     private static string xlsxFolder = string.Empty;
     private static string protoFolder = string.Empty;
-
+    private static string PythonToolsDir;
+    
     private bool xlsxGenLuaFinished = false;
     private bool protoGenLuaFinished = false;
     
     void OnEnable()
     {
+        if (string.IsNullOrEmpty(PythonToolsDir))
+        {
+            PythonToolsDir = Path.GetDirectoryName(Application.dataPath) + "/ConfigData/trunk/tools";
+        }
         ReadPath();
     }
 
@@ -56,7 +61,7 @@ public class ConfigTools : EditorWindow
         GUILayout.Label("---------------------");
         if (GUILayout.Button("xlsx gen lua", GUILayout.Width(100)))
         {
-            XlsxGenLua();
+            XlsxGenLua("toconfigs.py");
         }
         GUILayout.Label("---------------------");
         GUILayout.EndHorizontal();
@@ -72,25 +77,35 @@ public class ConfigTools : EditorWindow
         GUILayout.EndHorizontal();
     }
 
-    private void XlsxGenLua()
+    private void XlsxGenLua(string pyName)
     {
         if (!CheckXlsxPath(xlsxFolder))
         {
             return;
         }
 
-        Process p = new Process();
-        p.StartInfo.FileName = @"python";
-        p.StartInfo.Arguments = xlsxFolder + "/tools/toconfigs.py";
-        p.StartInfo.UseShellExecute = false;
-        p.StartInfo.RedirectStandardOutput = true;
-        p.StartInfo.RedirectStandardInput = true;
-        p.StartInfo.RedirectStandardError = true;
-        p.StartInfo.CreateNoWindow = true;
-        p.StartInfo.WorkingDirectory = xlsxFolder + "/tools";
-        p.Start();
-        p.BeginOutputReadLine();
-        p.OutputDataReceived += new DataReceivedEventHandler((object sender, DataReceivedEventArgs e) =>
+        Process process = new Process();
+        string arg0 = PythonToolsDir + $"/{pyName}";
+        string arg1 = xlsxFolder;
+#if UNITY_EDITOR_OSX
+        string shell = "xlsx_gen_lua.sh";
+        process.StartInfo.FileName = "/bin/bash";
+        process.StartInfo.Arguments = $"{shell} {arg0} {arg1} {PythonToolsDir}";
+        process.StartInfo.WorkingDirectory = Path.Combine(Application.dataPath, "Editor/GameTools");
+#else
+        process.StartInfo.FileName = @"python";
+        process.StartInfo.Arguments = arg0 + " " + arg1;
+        process.StartInfo.WorkingDirectory = PythonToolsDir;
+#endif
+        process.StartInfo.UseShellExecute = false;
+        process.StartInfo.RedirectStandardOutput = true;
+        process.StartInfo.RedirectStandardInput = true;
+        process.StartInfo.RedirectStandardError = true;
+        process.StartInfo.CreateNoWindow = true;
+        process.Start();
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
+        process.OutputDataReceived += new DataReceivedEventHandler((object sender, DataReceivedEventArgs e) =>
         {
             if (!string.IsNullOrEmpty(e.Data))
             {
@@ -102,8 +117,16 @@ public class ConfigTools : EditorWindow
                     {
                         pr.Close();
                     }
+
                     xlsxGenLuaFinished = true;
                 }
+            }
+        });
+        process.ErrorDataReceived += new DataReceivedEventHandler((object sender, DataReceivedEventArgs e) =>
+        {
+            if (!string.IsNullOrEmpty(e.Data))
+            {
+                UnityEngine.Debug.LogError(e.Data);
             }
         });
     }

@@ -18,13 +18,13 @@ local function SetAccountInfo(self, account, password)
 	self.password = password
 	CS.UnityEngine.PlayerPrefs.SetString("account", account)
 	CS.UnityEngine.PlayerPrefs.SetString("password", password)
-	DataManager:GetInstance():Broadcast(DataMessageNames.ON_ACCOUNT_INFO_CHG, account, password)
+	DataManager:I():Broadcast(DataMessageNames.ON_ACCOUNT_INFO_CHG, account, password)
 end
 
 local function SetLoginServerID(self, id)
 	self.login_server_id = id
 	CS.UnityEngine.PlayerPrefs.SetInt("login_server_id", id)
-	DataManager:GetInstance():Broadcast(DataMessageNames.ON_LOGIN_SERVER_ID_CHG, id)
+	DataManager:I():Broadcast(DataMessageNames.ON_LOGIN_SERVER_ID_CHG, id)
 end
 
 ClientData.__init = __init

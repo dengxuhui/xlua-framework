@@ -63,12 +63,12 @@ local function CoOnPrepare(self)
 	end
 
 	for res_path,res_type in pairs(self.preload_resources) do
-		ResourcesManager:GetInstance():CoLoadAsync(res_path, res_type, ProgressCallback)
+		ResourcesManager:I():CoLoadAsync(res_path, res_type, ProgressCallback)
 		finish_count = finish_count + 1
 		coroutine.yieldreturn(finish_count * progress_slice)
 	end
 	for res_path,inst_count in pairs(self.preload_prefab) do
-		GameObjectPool:GetInstance():CoPreLoadGameObjectAsync(res_path, inst_count, ProgressCallback)
+		GameObjectPool:I():CoPreLoadGameObjectAsync(res_path, inst_count, ProgressCallback)
 		finish_count = finish_count + 1
 		coroutine.yieldreturn(finish_count * progress_slice)
 	end

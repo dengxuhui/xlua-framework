@@ -163,7 +163,7 @@ local function InnerOpenWindow(self, target, ...)
 	elseif not target.IsLoading then
 		target.IsLoading = true
 		local params = SafePack(...)
-		GameObjectPool:GetInstance():GetGameObjectAsync(target.PrefabPath, function(go)
+		GameObjectPool:I():GetGameObjectAsync(target.PrefabPath, function(go)
 			if IsNull(go) then
 				return
 			end
@@ -295,7 +295,7 @@ end
 local function InnerDestroyWindow(self, ui_name, target, include_keep_model)
 	self:Broadcast(UIMessageNames.UIFRAME_ON_WINDOW_DESTROY, target)
 	-- 说明：一律缓存，如果要真的清理，那是清理缓存时需要管理的功能
-	GameObjectPool:GetInstance():RecycleGameObject(self.windows[ui_name].PrefabPath, target.View.gameObject)
+	GameObjectPool:I():RecycleGameObject(self.windows[ui_name].PrefabPath, target.View.gameObject)
 	if include_keep_model then
 		self.keep_model[ui_name] = nil
 		InnerDelete(target.Model)
@@ -430,7 +430,7 @@ local function PopWindowStack(self)
 	local end_index = table.count(self.__window_stack)
 	for i = bg_index + 1, end_index  do
 		local ui_name = self.__window_stack[i]
-		UIManager:GetInstance():OpenWindow(ui_name)
+		UIManager:I():OpenWindow(ui_name)
 	end
 	self.__enable_record = true
 end

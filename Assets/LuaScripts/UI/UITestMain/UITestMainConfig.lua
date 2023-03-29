@@ -5,15 +5,15 @@
 
 -- 窗口配置
 local UITestMain = {
-	Name = UIWindowNames.UITestMain,
-	Layer = UILayers.BackgroudLayer,
-	Model = nil,
-	Ctrl = require "UI.UITestMain.Controller.UITestMainCtrl",
-	View = require "UI.UITestMain.View.UITestMainView",
-	PrefabPath = "UI/Prefabs/View/UITestMain.prefab",
+    Name = UIWindowNames.UITestMain,
+    Layer = UILayers.BackgroudLayer,
+    Model = nil,
+    Ctrl = require "UI.UITestMain.TestMain.UITestMainCtrl",
+    View = require "UI.UITestMain.TestMain.UITestMainView",
+    PrefabPath = "UI/Prefabs/View/UITestMain.prefab",
 }
 
 return {
-	-- 配置
-	UITestMain = UITestMain,
+    -- 配置
+    UITestMain = UITestMain,
 }

@@ -7,9 +7,9 @@
 local UILoading = {
 	Name = UIWindowNames.UILoading,
 	Layer = UILayers.TopLayer,
-	Model = require "UI.UILoading.Model.UILoadingModel",
+	Model = require "UI.UILoading.Loading.UILoadingModel",
 	Ctrl = nil,
-	View = require "UI.UILoading.View.UILoadingView",
+	View = require "UI.UILoading.Loading.UILoadingView",
 	PrefabPath = "UI/Prefabs/View/UILoading.prefab",
 }
 

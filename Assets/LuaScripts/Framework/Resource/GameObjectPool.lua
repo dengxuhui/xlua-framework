@@ -92,7 +92,7 @@ local function PreLoadGameObjectAsync(self, path, inst_count, callback, ...)
 	end
 	
 	local args = SafePack(...)
-	ResourcesManager:GetInstance():LoadAsync(path, typeof(CS.UnityEngine.GameObject), function(go)
+	ResourcesManager:I():LoadAsync(path, typeof(CS.UnityEngine.GameObject), function(go)
 		if not IsNull(go) then
 			CacheAndInstGameObject(self, path, go, inst_count)
 		end
@@ -109,7 +109,7 @@ local function CoPreLoadGameObjectAsync(self, path, inst_count, progress_callbac
 		return
 	end
 	
-	local go = ResourcesManager:GetInstance():CoLoadAsync(path, typeof(CS.UnityEngine.GameObject), progress_callback)
+	local go = ResourcesManager:I():CoLoadAsync(path, typeof(CS.UnityEngine.GameObject), progress_callback)
 	if not IsNull(go) then
 		CacheAndInstGameObject(self, path, go, inst_count)
 	end

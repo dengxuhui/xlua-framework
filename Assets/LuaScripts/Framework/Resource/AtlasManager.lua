@@ -15,7 +15,7 @@ local function LoadImageAsync(self, atlas_config, image_name, callback, ...)
 	local atlas_path = atlas_config.AtlasPath
 	local image_path = atlas_path.."/"..image_name
 	
-	ResourcesManager:GetInstance():LoadAsync(image_path, sprite_type, function(sprite, ...)
+	ResourcesManager:I():LoadAsync(image_path, sprite_type, function(sprite, ...)
 		if callback then
 			callback(not IsNull(sprite) and sprite or nil, ...)
 		end
@@ -24,7 +24,7 @@ end
 
 -- 从图集异步加载图片：协程方式
 local function CoLoadImageAsync(self, atlas_config, image_name, progress_callback)
-	local sprite = ResourcesManager:GetInstance():CoLoadAsync(path, sprite_type, progress_callback)
+	local sprite = ResourcesManager:I():CoLoadAsync(path, sprite_type, progress_callback)
 	return not IsNull(sprite) and sprite or nil
 end
 

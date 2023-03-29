@@ -43,9 +43,9 @@ end
 -- 启动
 local function Startup(self)
 	self:Dispose()
-	self.__update_handle = UpdateBeat:CreateListener(UpdateHandle, UpdateManager:GetInstance())
-	self.__lateupdate_handle = LateUpdateBeat:CreateListener(LateUpdateHandle, UpdateManager:GetInstance())
-	self.__fixedupdate_handle = FixedUpdateBeat:CreateListener(FixedUpdateHandle, UpdateManager:GetInstance())
+	self.__update_handle = UpdateBeat:CreateListener(UpdateHandle, UpdateManager:I())
+	self.__lateupdate_handle = LateUpdateBeat:CreateListener(LateUpdateHandle, UpdateManager:I())
+	self.__fixedupdate_handle = FixedUpdateBeat:CreateListener(FixedUpdateHandle, UpdateManager:I())
 	UpdateBeat:AddListener(self.__update_handle)
 	LateUpdateBeat:AddListener(self.__lateupdate_handle)
 	FixedUpdateBeat:AddListener(self.__fixedupdate_handle)

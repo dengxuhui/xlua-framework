@@ -5,15 +5,15 @@
 
 -- 窗口配置
 local UINoticeTip = {
-	Name = UIWindowNames.UINoticeTip,
-	Layer = UILayers.TipLayer,
-	Model = require "UI.UINoticeTip.Model.UINoticeTipModel",
-	Ctrl = nil,
-	View = require "UI.UINoticeTip.View.UINoticeTipView",
-	PrefabPath = "UI/Prefabs/Common/UINoticeTip.prefab",
+    Name = UIWindowNames.UINoticeTip,
+    Layer = UILayers.TipLayer,
+    Model = require "UI.UINoticeTip.NoticeTip.UINoticeTipModel",
+    Ctrl = nil,
+    View = require "UI.UINoticeTip.NoticeTip.UINoticeTipView",
+    PrefabPath = "UI/Prefabs/Common/UINoticeTip.prefab",
 }
 
 return {
-	-- 配置
-	UINoticeTip = UINoticeTip,
+    -- 配置
+    UINoticeTip = UINoticeTip,
 }

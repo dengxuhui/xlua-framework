@@ -7,7 +7,7 @@ HotfixMain = {}
 
 -- 需要被加载的热修复模块
 local modules = {
-	"XLua.Hotfix.HotfixTest",
+	--"XLua.Hotfix.HotfixTest",
 }
 
 local function Start()

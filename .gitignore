@@ -104,3 +104,7 @@ crashlytics-build.properties
 
 # Android Studio
 /.idea/
+
+#AssetBundle Build
+Assets/AssetsPackage/Lua/
+Assets/AssetsPackage/Lua.meta

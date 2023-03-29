@@ -89,15 +89,15 @@ EffectConfig = require "Resource.Config.EffectConfig"
 BaseEffect = require "Framework.Resource.Effect.Base.BaseEffect"
 EffectManager = require "Framework.Resource.Effect.EffectManager"
 
--- net
+---- net
 HallConnector = require "Net.Connector.HallConnector"
 
 -- 单例类初始化
-UIManager:GetInstance()
-DataManager:GetInstance()
-ResourcesManager:GetInstance()
-UpdateManager:GetInstance()
-SceneManager:GetInstance()
-AtlasManager:GetInstance()
-LogicUpdater:GetInstance()
-HallConnector:GetInstance()
+UIManager:I()
+DataManager:I()
+ResourcesManager:I()
+UpdateManager:I()
+SceneManager:I()
+AtlasManager:I()
+LogicUpdater:I()
+HallConnector:I()

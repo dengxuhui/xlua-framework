@@ -17,18 +17,18 @@
 local UILogin = {
 	Name = UIWindowNames.UILogin,
 	Layer = UILayers.BackgroudLayer,
-	Model = require "UI.UILogin.Model.UILoginModel",
-	Ctrl = require "UI.UILogin.Controller.UILoginCtrl",
-	View = require "UI.UILogin.View.UILoginView",
+	Model = require "UI.UILogin.Login.UILoginModel",
+	Ctrl = require "UI.UILogin.Login.UILoginCtrl",
+	View = require "UI.UILogin.Login.UILoginView",
 	PrefabPath = "UI/Prefabs/View/UILogin.prefab",
 }
 
 local UILoginServer = {
 	Name = UIWindowNames.UILoginServer,
 	Layer = UILayers.NormalLayer,
-	Model = require "UI.UILogin.Model.UILoginServerModel",
-	Ctrl = require "UI.UILogin.Controller.UILoginServerCtrl",
-	View = require "UI.UILogin.View.UILoginServerView",
+	Model = require "UI.UILogin.LoginServer.UILoginServerModel",
+	Ctrl = require "UI.UILogin.LoginServer.UILoginServerCtrl",
+	View = require "UI.UILogin.LoginServer.UILoginServerView",
 	PrefabPath = "UI/Prefabs/View/UILoginServer.prefab",
 }
 

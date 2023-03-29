@@ -93,33 +93,33 @@ end
 local function AddUIListener(self, msg_name, callback)
 	local bindFunc = Bind(self, callback)
 	AddCallback(self.__ui_callback, msg_name, bindFunc)
-	UIManager:GetInstance():AddListener(msg_name, bindFunc)
+	UIManager:I():AddListener(msg_name, bindFunc)
 end
 
 -- 发送UI数据变动事件，别重写
 local function UIBroadcast(self, msg_name, ...)
-	UIManager:GetInstance():Broadcast(msg_name, ...)
+	UIManager:I():Broadcast(msg_name, ...)
 end
 
 -- 注销UI数据监听事件，别重写
 local function RemoveUIListener(self, msg_name, callback)
 	local bindFunc = GetCallback(self.__ui_callback, msg_name)
 	RemoveCallback(self.__ui_callback, msg_name, bindFunc)
-	UIManager:GetInstance():RemoveListener(msg_name, bindFunc)
+	UIManager:I():RemoveListener(msg_name, bindFunc)
 end
 
 -- 注册游戏数据监听事件，别重写
 local function AddDataListener(self, msg_name, callback)
 	local bindFunc = Bind(self, callback)
 	AddCallback(self.__data_callback, msg_name, bindFunc)
-	DataManager:GetInstance():AddListener(msg_name, bindFunc)
+	DataManager:I():AddListener(msg_name, bindFunc)
 end
 
 -- 注销游戏数据监听事件，别重写
 local function RemoveDataListener(self, msg_name, callback)
 	local bindFunc = GetCallback(self.__data_callback, msg_name)
 	RemoveCallback(self.__data_callback, msg_name, bindFunc)
-	DataManager:GetInstance():RemoveListener(msg_name, bindFunc)
+	DataManager:I():RemoveListener(msg_name, bindFunc)
 end
 
 UIBaseModel.__init = __init

@@ -12,30 +12,30 @@ local Updatable = BaseClass("Updatable")
 local function AddUpdate(self)
 	if self.Update ~= nil then
 		self.__update_handle = BindCallback(self, self.Update)
-		UpdateManager:GetInstance():AddUpdate(self.__update_handle)
+		UpdateManager:I():AddUpdate(self.__update_handle)
 	end
 	if self.LateUpdate ~= nil then
 		self.__lateupdate_handle = BindCallback(self, self.LateUpdate)
-		UpdateManager:GetInstance():AddLateUpdate(self.__lateupdate_handle)
+		UpdateManager:I():AddLateUpdate(self.__lateupdate_handle)
 	end
 	if self.FixedUpdate ~= nil then
 		self.__fixedupdate_handle = BindCallback(self, self.FixedUpdate)
-		UpdateManager:GetInstance():AddFixedUpdate(self.__fixedupdate_handle)
+		UpdateManager:I():AddFixedUpdate(self.__fixedupdate_handle)
 	end
 end
 
 -- 注销更新函数
 local function RemoveUpdate(self)
 	if self.__update_handle ~= nil then
-		UpdateManager:GetInstance():RemoveUpdate(self.__update_handle)
+		UpdateManager:I():RemoveUpdate(self.__update_handle)
 		self.__update_handle = nil
 	end
 	if self.__lateupdate_handle ~= nil then
-		UpdateManager:GetInstance():RemoveLateUpdate(self.__lateupdate_handle)
+		UpdateManager:I():RemoveLateUpdate(self.__lateupdate_handle)
 		self.__lateupdate_handle = nil
 	end
 	if self.__fixedupdate_handle ~= nil then
-		UpdateManager:GetInstance():RemoveFixedUpdate(self.__fixedupdate_handle)
+		UpdateManager:I():RemoveFixedUpdate(self.__fixedupdate_handle)
 		self.__fixedupdate_handle = nil
 	end
 end

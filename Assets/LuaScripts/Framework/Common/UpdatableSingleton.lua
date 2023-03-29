@@ -18,8 +18,7 @@ end
 local function Startup(self)
 end
 
--- 不要重写
-local function GetInstance(self)
+local function I(self)
 	if rawget(self, "Instance") == nil then
 		rawset(self, "Instance", self.New())
 	end
@@ -35,7 +34,6 @@ end
 UpdatableSingleton.__init = __init
 UpdatableSingleton.__delete = __delete
 UpdatableSingleton.Startup = Startup
-UpdatableSingleton.GetInstance = GetInstance
-UpdatableSingleton.Destory = Destory
+UpdatableSingleton.I = I
 
 return UpdatableSingleton
