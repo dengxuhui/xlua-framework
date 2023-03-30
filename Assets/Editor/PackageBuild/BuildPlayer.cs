@@ -47,7 +47,7 @@ public class BuildPlayer : Editor
     
     private static void InnerBuildAssetBundles(BuildTarget buildTarget, string channelName, bool writeConfig)
     {
-        BuildAssetBundleOptions buildOption = BuildAssetBundleOptions.IgnoreTypeTreeChanges | BuildAssetBundleOptions.DeterministicAssetBundle;
+        BuildAssetBundleOptions buildOption = BuildAssetBundleOptions.IgnoreTypeTreeChanges | BuildAssetBundleOptions.DeterministicAssetBundle | BuildAssetBundleOptions.ChunkBasedCompression;
         string outputPath = PackageUtils.GetAssetBundleOutputPath(buildTarget, channelName);
         AssetBundleManifest manifest = BuildPipeline.BuildAssetBundles(outputPath, buildOption, buildTarget);
         if (manifest != null && writeConfig)

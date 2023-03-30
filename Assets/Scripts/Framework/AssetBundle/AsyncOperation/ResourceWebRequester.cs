@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using XLua;
 
 /// <summary>
@@ -24,8 +25,10 @@ namespace AssetBundles
     {
         static Queue<ResourceWebRequester> pool = new Queue<ResourceWebRequester>();
         static int sequence = 0;
-        protected WWW www = null;
-        protected bool isOver = false;
+        private UnityWebRequest uwr = null;
+        private AssetBundleCreateRequest abRequest = null;
+        private bool isOver = false;
+        private int timeout = 0;
 
         public static ResourceWebRequester Get()
         {
@@ -49,72 +52,54 @@ namespace AssetBundles
             Sequence = sequence;
         }
 
-        public void Init(string name, string url, bool noCache = false)
+        public void Init(string name, string url, bool noCache = false, bool ab = false, bool onlyHeader = false,
+            int timeout = 0)
         {
-            assetbundleName = name;
+            this.assetbundleName = name;
+            this.ab = ab;
             this.url = url;
             this.noCache = noCache;
-            www = null;
+            this.timeout = timeout;
+            this.onlyHeader = onlyHeader;
+            uwr = null;
             isOver = false;
         }
 
-        public int Sequence
-        {
-            get;
-            protected set;
-        }
+        public int Sequence { get; protected set; }
 
-        public bool noCache
-        {
-            get;
-            protected set;
-        }
+        public bool noCache { get; protected set; }
 
-        public string assetbundleName
-        {
-            get;
-            protected set;
-        }
+        public string assetbundleName { get; protected set; }
 
-        public string url
-        {
-            get;
-            protected set;
-        }
+        public bool ab { get; protected set; }
+
+        public bool onlyHeader { get; protected set; }
+
+        public string url { get; protected set; }
+
+        public string text => uwr?.downloadHandler.text;
+        public byte[] bytes => uwr?.downloadHandler.data;
 
         public AssetBundle assetbundle
         {
             get
             {
-                return www.assetBundle;
+                if (uwr != null)
+                {
+                    return DownloadHandlerAssetBundle.GetContent(uwr);
+                }
+                else if (abRequest != null)
+                {
+                    return abRequest.assetBundle;
+                }
+
+                return null;
             }
         }
 
-        public byte[] bytes
-        {
-            get
-            {
-                return www.bytes;
-            }
-        }
-
-        public string text
-        {
-            get
-            {
-                return www.text;
-            }
-        }
-
-        public string error
-        {
-            get
-            {
-                // 注意：不能直接判空
-                // 详见：https://docs.unity3d.com/530/Documentation/ScriptReference/WWW-error.html
-                return string.IsNullOrEmpty(www.error) ? null : www.error;
-            }
-        }
+        // 注意：不能直接判空
+        // 详见：https://docs.unity3d.com/530/Documentation/ScriptReference/WWW-error.html
+        public string error => (uwr == null || string.IsNullOrEmpty(uwr.error)) ? null : uwr.error;
 
         public override bool IsDone()
         {
@@ -123,18 +108,36 @@ namespace AssetBundles
 
         public void Start()
         {
-            www = new WWW(url);
-            if (www == null)
+            if (ab)
             {
-                Logger.LogError("New www failed!!!");
+                if (onlyHeader)
+                {
+                    abRequest = AssetBundle.LoadFromFileAsync(url);
+                }
+                else
+                {
+                    uwr = UnityWebRequestAssetBundle.GetAssetBundle(url);
+                }
+            }
+            else
+            {
+                uwr = UnityWebRequest.Get(url);
+            }
+
+            if (uwr == null && abRequest == null)
+            {
                 isOver = true;
             }
             else
             {
-                //Logger.Log("Downloading : " + url);
+                if (uwr != null)
+                {
+                    uwr.timeout = this.timeout;
+                    uwr.SendWebRequest();
+                }
             }
         }
-        
+
         public override float Progress()
         {
             if (isDone)
@@ -142,7 +145,16 @@ namespace AssetBundles
                 return 1.0f;
             }
 
-            return www != null ? www.progress : 0f;
+            if (uwr != null)
+            {
+                return uwr.downloadProgress;
+            }
+            else if (abRequest != null)
+            {
+                return abRequest.progress;
+            }
+
+            return 0.0f;
         }
 
         public override void Update()
@@ -151,26 +163,36 @@ namespace AssetBundles
             {
                 return;
             }
-            
-            isOver = www != null && (www.isDone || !string.IsNullOrEmpty(www.error));
+
+            if (uwr != null)
+            {
+                isOver = (uwr.isDone || !string.IsNullOrEmpty(uwr.error));
+            }
+            else if (abRequest != null)
+            {
+                isOver = abRequest.isDone;
+            }
+
             if (!isOver)
             {
                 return;
             }
 
-            if (www != null && !string.IsNullOrEmpty(www.error))
+            if (uwr != null && !string.IsNullOrEmpty(uwr.error))
             {
-                Logger.LogError($"{www.url}:{www.error}");
+                Logger.LogError("{0}:{1}", url, uwr.error);
             }
         }
 
         public override void Dispose()
         {
-            if (www != null)
+            if (uwr != null)
             {
-                www.Dispose();
-                www = null;
+                uwr.Dispose();
+                uwr = null;
             }
+
+            abRequest = null;
             Recycle(this);
         }
     }

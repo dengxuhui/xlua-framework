@@ -124,8 +124,8 @@ namespace AssetBundles
         {
             var instance = AssetBundleManager.Instance;
             var abRefrences = instance.GetAssetBundleRefrences(assetbundleName);
-            var webRequestRefrences = instance.GetWebRequesterRefrences(assetbundleName);
-            var abLoaderRefrences = instance.GetAssetBundleLoaderRefrences(assetbundleName);
+            var webRequestRefrences = instance.GetWebRequesterReferences(assetbundleName);
+            var abLoaderRefrences = instance.GetAssetBundleLoaderReferences(assetbundleName);
             var expanded = false;
 
             expanded = GUILayoutUtils.DrawSubHeader(level + 1, "ABRefrence:", abRefrenceSate, key, abRefrences.Count.ToString());
@@ -159,7 +159,7 @@ namespace AssetBundles
             GUILayoutUtils.DrawProperty("Has Loaded:", loaded ? "true" : "false");
             EditorGUILayout.EndHorizontal();
 
-            var referencesCount = instance.GetAssetbundleRefrenceCount(assetbundleName);
+            var referencesCount = instance.GetAssetbundleReferenceCount(assetbundleName);
             expanded = GUILayoutUtils.DrawSubHeader(level, "References Count:", refrenceSate, key, referencesCount.ToString());
             if (expanded)
             {

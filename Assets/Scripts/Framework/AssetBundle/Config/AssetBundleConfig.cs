@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using XLua;
 #if UNITY_EDITOR
 using UnityEditor;
 using System.IO;
@@ -18,6 +19,7 @@ namespace AssetBundles
         public const string AssetBundlesFolderName = "AssetBundles";
         public const string AssetBundleSuffix = ".assetbundle";
         public const string AssetsFolderName = "AssetsPackage";
+        public const string AssetsFolderPath = "Assets/" + AssetsFolderName + "/";
         public const string ChannelFolderName = "Channel";
         public const string AssetsPathMapFileName = "AssetsMap.bytes";
         public const string VariantsMapFileName = "VariantsMap.bytes";

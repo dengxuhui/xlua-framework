@@ -29,24 +29,31 @@ namespace AssetBundles
                     return null;
             }
         }
-       
-        public static string GetStreamingAssetsFilePath(string assetPath = null)
+
+        public static string GetStreamingAssetsFilePath(string assetPath = null, bool wwwUrl = true)
         {
-#if UNITY_EDITOR
-            string outputPath = Path.Combine("file://" + Application.streamingAssetsPath, AssetBundleConfig.AssetBundlesFolderName);
-#else
-#if UNITY_IPHONE || UNITY_IOS
-            string outputPath = Path.Combine("file://" + Application.streamingAssetsPath, AssetBundleConfig.AssetBundlesFolderName);
+            string outputPath;
+#if UNITY_EDITOR || UNITY_IPHONE || UNITY_IOS
+            if (wwwUrl)
+            {
+                outputPath = Path.Combine("file://" + Application.streamingAssetsPath,
+                    AssetBundleConfig.AssetBundlesFolderName);
+            }
+            else
+            {
+                outputPath = Path.Combine(Application.streamingAssetsPath,
+                    AssetBundleConfig.AssetBundlesFolderName);
+            }
 #elif UNITY_ANDROID
-            string outputPath = Path.Combine(Application.streamingAssetsPath, AssetBundleConfig.AssetBundlesFolderName);
+            outputPath = Path.Combine(Application.streamingAssetsPath, AssetBundleConfig.AssetBundlesFolderName);
 #else
             Logger.LogError("Unsupported platform!!!");
-#endif
 #endif
             if (!string.IsNullOrEmpty(assetPath))
             {
                 outputPath = Path.Combine(outputPath, assetPath);
             }
+
             return outputPath;
         }
 
@@ -57,12 +64,20 @@ namespace AssetBundles
             {
                 outputPath = Path.Combine(outputPath, assetPath);
             }
+
             return outputPath;
         }
 
-        public static string GetPersistentFilePath(string assetPath = null)
+        public static string GetPersistentFilePath(string assetPath = null, bool wwwUrl = true)
         {
-            return "file://" + GetPersistentDataPath(assetPath);
+            if (wwwUrl)
+            {
+                return "file://" + GetPersistentDataPath(assetPath);
+            }
+            else
+            {
+                return GetPersistentDataPath(assetPath);
+            }
         }
 
         public static string GetPersistentDataPath(string assetPath = null)
@@ -72,7 +87,7 @@ namespace AssetBundles
             {
                 outputPath = Path.Combine(outputPath, assetPath);
             }
-#if UNITY_EDITOR_WIN
+#if UNITY_EDITOR
             return GameUtility.FormatToSysFilePath(outputPath);
 #else
             return outputPath;
@@ -86,18 +101,18 @@ namespace AssetBundles
         }
 
         // 注意：这个路径是给WWW读文件使用的url，如果要直接磁盘写persistentDataPath，使用GetPlatformPersistentDataPath
-        public static string GetAssetBundleFileUrl(string filePath)
+        public static string GetAssetBundleFileUrl(string filePath, bool wwwUrl = true)
         {
             if (CheckPersistentFileExsits(filePath))
             {
-                return GetPersistentFilePath(filePath);
+                return GetPersistentFilePath(filePath, wwwUrl);
             }
             else
             {
-                return GetStreamingAssetsFilePath(filePath);
+                return GetStreamingAssetsFilePath(filePath, wwwUrl);
             }
         }
-        
+
         public static string AssetBundlePathToAssetBundleName(string assetPath)
         {
             if (!string.IsNullOrEmpty(assetPath))
@@ -106,6 +121,7 @@ namespace AssetBundles
                 {
                     assetPath = AssetsPathToPackagePath(assetPath);
                 }
+
                 //no " "
                 assetPath = assetPath.Replace(" ", "");
                 //there should not be any '.' in the assetbundle name
@@ -115,30 +131,30 @@ namespace AssetBundles
                 assetPath = assetPath + AssetBundleConfig.AssetBundleSuffix;
                 return assetPath.ToLower();
             }
+
             return null;
         }
-        
+
         public static string PackagePathToAssetsPath(string assetPath)
         {
-            return "Assets/" + AssetBundleConfig.AssetsFolderName + "/" + assetPath;
+            return AssetBundleConfig.AssetsFolderPath + assetPath;
         }
 
         public static bool IsPackagePath(string assetPath)
         {
-            string path = "Assets/" + AssetBundleConfig.AssetsFolderName + "/";
-            return assetPath.StartsWith(path);
+            return assetPath.StartsWith(AssetBundleConfig.AssetsFolderPath);
         }
-        
+
         public static string AssetsPathToPackagePath(string assetPath)
         {
-            string path = "Assets/" + AssetBundleConfig.AssetsFolderName + "/";
+            string path = AssetBundleConfig.AssetsFolderPath;
             if (assetPath.StartsWith(path))
             {
                 return assetPath.Substring(path.Length);
             }
             else
             {
-                Debug.LogError("Asset path is not a package path!");
+                Debug.LogError("Asset path is not a package path! " + assetPath);
                 return assetPath;
             }
         }

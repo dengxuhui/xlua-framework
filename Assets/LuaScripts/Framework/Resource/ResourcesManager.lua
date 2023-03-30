@@ -14,18 +14,8 @@ local AssetBundleManager = CS.AssetBundles.AssetBundleManager.Instance
 local AssetBundleUtility = CS.AssetBundles.AssetBundleUtility
 
 -- 是否有加载任务正在进行
-local function IsProsessRunning(self)
-	return AssetBundleManager.IsProsessRunning
-end
-
--- 设置常驻包
--- 注意：
--- 1、公共包（被2个或者2个其它AB包所依赖的包）底层会自动设置常驻包
--- 2、任何情况下不想被卸载的非公共包（如Lua脚本）需要手动设置常驻包
-local function SetAssetBundleResident(self, path, resident)
-	local assetbundleName = AssetBundleUtility.AssetBundlePathToAssetBundleName(path)
-	resident = resident and true or false
-	AssetBundleManager:SetAssetBundleResident(assetbundleName, resident)
+local function IsProcessRunning(self)
+	return AssetBundleManager.IsProcessRunning
 end
 
 -- 异步加载AssetBundle：回调形式
@@ -76,15 +66,9 @@ end
 -- 清理资源：切换场景时调用
 local function Cleanup(self)
 	AssetBundleManager:ClearAssetsCache()
-	AssetBundleManager:UnloadAllUnusedResidentAssetBundles()
-	
-	-- TODO：Lua脚本要重新加载，暂时吧，后面缓缓策略
-	local luaAssetbundleName = CS.XLuaManager.Instance.AssetbundleName
-	AssetBundleManager:AddAssetbundleAssetsCache(luaAssetbundleName)
 end
 
-ResourcesManager.IsProsessRunning = IsProsessRunning
-ResourcesManager.SetAssetBundleResident = SetAssetBundleResident
+ResourcesManager.IsProcessRunning = IsProcessRunning
 ResourcesManager.LoadAssetBundleAsync = LoadAssetBundleAsync
 ResourcesManager.CoLoadAssetBundleAsync = CoLoadAssetBundleAsync
 ResourcesManager.LoadAsync = LoadAsync

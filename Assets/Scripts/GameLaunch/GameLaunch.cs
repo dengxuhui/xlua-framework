@@ -15,7 +15,7 @@ public class GameLaunch : MonoBehaviour
     GameObject noticeTipPrefab;
     AssetbundleUpdater updater;
 
-    IEnumerator Start ()
+    IEnumerator Start()
     {
         LoggerHelper.Instance.Startup();
 #if UNITY_IPHONE
@@ -42,8 +42,7 @@ public class GameLaunch : MonoBehaviour
         start = DateTime.Now;
         XLuaManager.Instance.Startup();
         string luaAssetbundleName = XLuaManager.Instance.AssetbundleName;
-        AssetBundleManager.Instance.SetAssetBundleResident(luaAssetbundleName, true);
-        var abloader = AssetBundleManager.Instance.LoadAssetBundleAsync(luaAssetbundleName);
+        var abloader = AssetBundleManager.Instance.LoadAssetBundleAsync(luaAssetbundleName, false);
         yield return abloader;
         abloader.Dispose();
         XLuaManager.Instance.OnInit();
@@ -60,8 +59,9 @@ public class GameLaunch : MonoBehaviour
         {
             updater.StartCheckUpdate();
         }
+
         yield break;
-	}
+    }
 
     IEnumerator InitAppVersion()
     {
@@ -72,14 +72,17 @@ public class GameLaunch : MonoBehaviour
 
         var appVersionPath = AssetBundleUtility.GetPersistentDataPath(BuildUtils.AppVersionFileName);
         var persistentAppVersion = GameUtility.SafeReadAllText(appVersionPath);
-        Logger.Log(string.Format("streamingAppVersion = {0}, persistentAppVersion = {1}", streamingAppVersion, persistentAppVersion));
+        Logger.Log(string.Format("streamingAppVersion = {0}, persistentAppVersion = {1}", streamingAppVersion,
+            persistentAppVersion));
 
         // 如果persistent目录版本比streamingAssets目录app版本低，说明是大版本覆盖安装，清理过时的缓存
-        if (!string.IsNullOrEmpty(persistentAppVersion) && BuildUtils.CheckIsNewVersion(persistentAppVersion, streamingAppVersion))
+        if (!string.IsNullOrEmpty(persistentAppVersion) &&
+            BuildUtils.CheckIsNewVersion(persistentAppVersion, streamingAppVersion))
         {
             var path = AssetBundleUtility.GetPersistentDataPath();
             GameUtility.SafeDeleteDir(path);
         }
+
         GameUtility.SafeWriteAllText(appVersionPath, streamingAppVersion);
         ChannelManager.instance.appVersion = streamingAppVersion;
         yield break;
@@ -132,6 +135,7 @@ public class GameLaunch : MonoBehaviour
             Logger.LogError("LoadAssetAsync noticeTipPrefab err : " + noticeTipPrefabPath);
             yield break;
         }
+
         var go = InstantiateGameObject(noticeTipPrefab);
         UINoticeTip.Instance.UIGameObject = go;
         yield break;
@@ -142,7 +146,7 @@ public class GameLaunch : MonoBehaviour
         var start = DateTime.Now;
         var loader = AssetBundleManager.Instance.LoadAssetAsync(launchPrefabPath, typeof(GameObject));
         yield return loader;
-        launchPrefab= loader.asset as GameObject;
+        launchPrefab = loader.asset as GameObject;
         Logger.Log(string.Format("Load launchPrefab use {0}ms", (DateTime.Now - start).Milliseconds));
         loader.Dispose();
         if (launchPrefab == null)
@@ -150,6 +154,7 @@ public class GameLaunch : MonoBehaviour
             Logger.LogError("LoadAssetAsync launchPrefab err : " + launchPrefabPath);
             yield break;
         }
+
         var go = InstantiateGameObject(launchPrefab);
         updater = go.AddComponent<AssetbundleUpdater>();
         yield break;

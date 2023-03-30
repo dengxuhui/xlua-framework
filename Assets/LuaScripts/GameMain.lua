@@ -30,7 +30,11 @@ end
 --主入口函数。从这里开始lua逻辑
 local function Start()
 	print("GameMain start...")
-	
+
+	--package.cpath = package.cpath .. ';/Users/dengxuhui/Library/Application Support/JetBrains/Rider2022.2/plugins/EmmyLua/debugger/emmy/mac/arm64/?.dylib'
+	--local dbg = require('emmy_core')
+	--dbg.tcpConnect('localhost', 9966)
+
 	-- 模块启动
 	UpdateManager:I():Startup()
 	TimerManager:I():Startup()

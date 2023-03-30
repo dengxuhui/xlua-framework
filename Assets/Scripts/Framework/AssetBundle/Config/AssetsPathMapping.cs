@@ -116,14 +116,18 @@ namespace AssetBundles
         {
             assetbundleName = null;
             assetName = null;
-            ResourcesMapItem item = null;
-            if (pathLookup.TryGetValue(assetPath, out item))
+            if (pathLookup.TryGetValue(assetPath, out var item))
             {
                 assetbundleName = item.assetbundleName;
                 assetName = item.assetName;
                 return true;
             }
             return false;
+        }
+
+        public bool MapAssetPath(string assetPath)
+        {
+            return pathLookup.ContainsKey(assetPath);
         }
         
         public List<string> GetAllAssetNames(string assetbundleName)

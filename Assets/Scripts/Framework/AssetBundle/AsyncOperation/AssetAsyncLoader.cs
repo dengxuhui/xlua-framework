@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using XLua;
 
 /// <summary>
@@ -79,8 +82,7 @@ namespace AssetBundles
             {
                 return 1.0f;
             }
-
-            return assetbundleLoader.progress;
+            return assetbundleLoader.progress;      
         }
 
         public override void Update()
@@ -89,7 +91,6 @@ namespace AssetBundles
             {
                 return;
             }
-
             isOver = assetbundleLoader.isDone;
             if (!isOver)
             {
